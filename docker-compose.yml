@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - ./backend/uploads:/app/backend/uploads
+      - ./stylemi.db:/app/stylemi.db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - STYLEMI_API_URL=http://backend:8000
+    depends_on:
+      - backend
